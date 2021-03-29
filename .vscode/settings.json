@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.pegjs": "pegjs",
+        "memory": "cpp",
+        "xstring": "cpp",
+        "xlocale": "cpp",
+        "vector": "cpp",
+        "xlocinfo": "cpp",
+        "xutility": "cpp"
+    }
+}
