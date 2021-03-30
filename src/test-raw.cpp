@@ -343,35 +343,14 @@ static void BM_Empty(benchmark::State& state) {
     }
 }
 
-static void BM_SomeFunction(benchmark::State& state) {
-    auto seg = state.range(0);
-    char* src = new char[seg];
-    char* dst = new char[seg];
-    memset(src, '_', seg);
-    // Perform setup here
-    for (auto _ : state) {
-        // This code gets timed
-        memcpy(dst, src, seg);
-    }
-    state.SetBytesProcessed(state.iterations() * state.range(0));
-    delete[]src;
-    delete[]dst;
-    state.SetComplexityN(seg);
-}
 
-static void BM_DenseRange(benchmark::State& state) {
-    for (auto _ : state) {
-        std::vector<int> v(state.range(0), state.range(0));
-        benchmark::DoNotOptimize(v.data());
-        benchmark::ClobberMemory();
-    }
-}
 
 // Register the function as a benchmark
 //BENCHMARK(BM_SomeFunction)->Range(8, 8 << 10)->Complexity(benchmark::BigO::oAuto);// ->Iterations(1);
 //BENCHMARK(BM_DenseRange)->DenseRange(0, 1024, 128);
 
 BENCHMARK(BM_Empty);
+BENCHMARK(BM_CallEvalCallPureJSFunc);
 BENCHMARK(BM_CallBindingJSFunc);
 BENCHMARK(BM_CallPureCPPFunc);
 BENCHMARK(BM_CallLoopCPPFunc);
@@ -395,7 +374,6 @@ BENCHMARK(BM_CallNatveWith_2_3_arguments);
 BENCHMARK(BM_CallNatveWith_2_4_arguments);
 
 BENCHMARK(BM_Empty);
-BENCHMARK(BM_CallEvalCallPureJSFunc);
 
 // Run the benchmark
 BENCHMARK_MAIN();

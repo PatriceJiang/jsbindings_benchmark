@@ -104,6 +104,19 @@ public:
 SeGuard uniqueSE;
 
 
+static void BM_CallEvalCallPureJSFunc(benchmark::State& state) {
+    auto* js = se::ScriptEngine::getInstance();
+    auto* fn = uniqueSE.testFn.toObject();
+    std::vector<se::Value> jsArgs;
+    se::AutoHandleScope scope;
+    se::Value ret;
+    std::string_view code = "testFn()";
+    for (auto _ : state) {
+        js->evalString(code.data(), code.length(), &ret);
+        benchmark::DoNotOptimize(ret);
+    }
+}
+
 static void BM_CallBindingJSFunc(benchmark::State& state) {
     auto* js = se::ScriptEngine::getInstance();
     auto* fn = uniqueSE.testFn.toObject();
@@ -299,6 +312,7 @@ static void BM_Empty(benchmark::State& state) {
 }
 
 BENCHMARK(BM_Empty);
+BENCHMARK(BM_CallEvalCallPureJSFunc);
 BENCHMARK(BM_CallBindingJSFunc);
 BENCHMARK(BM_CallPureCPPFunc);
 BENCHMARK(BM_CallLoopJSFunc);
@@ -319,5 +333,6 @@ BENCHMARK(BM_CallNatveWith_2_1_arguments);
 BENCHMARK(BM_CallNatveWith_2_2_arguments);
 BENCHMARK(BM_CallNatveWith_2_3_arguments);
 BENCHMARK(BM_CallNatveWith_2_4_arguments);
+BENCHMARK(BM_Empty);
 // Run the benchmark
 BENCHMARK_MAIN();
