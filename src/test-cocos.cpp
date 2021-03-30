@@ -224,7 +224,7 @@ static void BM_AccessJSPropertyInCPPOpt(benchmark::State& state) {
 }
 
 
-static void BM_CallNatveWith_2_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -234,7 +234,7 @@ static void BM_CallNatveWith_2_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_arguments_opt(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_arguments_opt(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -245,7 +245,7 @@ static void BM_CallNatveWith_2_arguments_opt(benchmark::State& state) {
 }
 
 
-static void BM_CallNatveWith_3_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_3_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -254,7 +254,7 @@ static void BM_CallNatveWith_3_arguments(benchmark::State& state) {
         assert(ret.isObject());
     }
 }
-static void BM_CallNatveWith_4_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_4_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -264,7 +264,7 @@ static void BM_CallNatveWith_4_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_1_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_1_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -274,7 +274,7 @@ static void BM_CallNatveWith_2_1_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_2_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_2_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -284,7 +284,7 @@ static void BM_CallNatveWith_2_2_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_3_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_3_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -294,7 +294,7 @@ static void BM_CallNatveWith_2_3_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_4_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -324,15 +324,15 @@ BENCHMARK(BM_CallLoopJSB_Dyn_AttrFunc);
 BENCHMARK(BM_AccessJSPropertyInCPP);
 BENCHMARK(BM_AccessJSPropertyInCPPOpt);
 
-BENCHMARK(BM_CallNatveWith_2_arguments);
-BENCHMARK(BM_CallNatveWith_2_arguments_opt);
-BENCHMARK(BM_CallNatveWith_3_arguments);
-BENCHMARK(BM_CallNatveWith_4_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_arguments_opt);
+BENCHMARK(BM_CallLoopNatveWith_3_arguments);
+BENCHMARK(BM_CallLoopNatveWith_4_arguments);
 
-BENCHMARK(BM_CallNatveWith_2_1_arguments);
-BENCHMARK(BM_CallNatveWith_2_2_arguments);
-BENCHMARK(BM_CallNatveWith_2_3_arguments);
-BENCHMARK(BM_CallNatveWith_2_4_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_1_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_2_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_3_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_4_arguments);
 BENCHMARK(BM_Empty);
 // Run the benchmark
 BENCHMARK_MAIN();

@@ -246,7 +246,7 @@ static void BM_AccessJSPropertyInCPPOpt(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -259,7 +259,7 @@ static void BM_CallNatveWith_2_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_3_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_3_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -271,7 +271,7 @@ static void BM_CallNatveWith_3_arguments(benchmark::State& state) {
         assert(result.ToLocalChecked()->IsObject());
     }
 }
-static void BM_CallNatveWith_4_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_4_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -284,7 +284,7 @@ static void BM_CallNatveWith_4_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_1_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_1_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -297,7 +297,7 @@ static void BM_CallNatveWith_2_1_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_2_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_2_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -310,7 +310,7 @@ static void BM_CallNatveWith_2_2_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_3_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_3_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -323,7 +323,7 @@ static void BM_CallNatveWith_2_3_arguments(benchmark::State& state) {
     }
 }
 
-static void BM_CallNatveWith_2_4_arguments(benchmark::State& state) {
+static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -364,14 +364,14 @@ BENCHMARK(BM_CallLoopJSB_Dyn_AttrFunc);
 BENCHMARK(BM_AccessJSPropertyInCPP);
 BENCHMARK(BM_AccessJSPropertyInCPPOpt);
 
-BENCHMARK(BM_CallNatveWith_2_arguments);
-BENCHMARK(BM_CallNatveWith_3_arguments);
-BENCHMARK(BM_CallNatveWith_4_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_arguments);
+BENCHMARK(BM_CallLoopNatveWith_3_arguments);
+BENCHMARK(BM_CallLoopNatveWith_4_arguments);
 
-BENCHMARK(BM_CallNatveWith_2_1_arguments);
-BENCHMARK(BM_CallNatveWith_2_2_arguments);
-BENCHMARK(BM_CallNatveWith_2_3_arguments);
-BENCHMARK(BM_CallNatveWith_2_4_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_1_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_2_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_3_arguments);
+BENCHMARK(BM_CallLoopNatveWith_2_4_arguments);
 
 BENCHMARK(BM_Empty);
 
