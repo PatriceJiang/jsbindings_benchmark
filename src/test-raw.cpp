@@ -97,20 +97,6 @@ private:
 UniqueSE inx;
 
 
-static void BM_CallEvalJSFunc(benchmark::State& state) {
-    v8::HandleScope rootScope(jsx->GetIsolate());
-    v8::Local<v8::Context> context = jsx->GetIsolate()->GetCurrentContext();
-    for (auto _ : state) {
-        // This code gets timed
-        //CallJSFunction(jsx->GetIsolate(), jsx->GetContext());
-        v8::Local<v8::Value> result;
-        jsx->EvalString("3 + 3", result);
-        int v = result->Int32Value(context).FromJust();
-        assert(v == 6);
-        benchmark::DoNotOptimize(v);
-    }
-}
-
 
 static void BM_CallEvalCallPureJSFunc(benchmark::State& state) {
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -176,7 +162,7 @@ static void BM_CallLoopCPPFunc(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSAttr(benchmark::State& state) {
+static void BM_CallLoopJS_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -189,7 +175,7 @@ static void BM_CallLoopJSAttr(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSDynAttr(benchmark::State& state) {
+static void BM_CallLoopJS_Dyn_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -202,7 +188,7 @@ static void BM_CallLoopJSDynAttr(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSBAttr(benchmark::State& state) {
+static void BM_CallLoopJSB_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -215,7 +201,7 @@ static void BM_CallLoopJSBAttr(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSBDynAttr(benchmark::State& state) {
+static void BM_CallLoopJSB_Dyn_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -228,7 +214,7 @@ static void BM_CallLoopJSBDynAttr(benchmark::State& state) {
     }
 }
 
-static void BM_AccessJSAttrInCPP(benchmark::State& state) {
+static void BM_AccessJSPropertyInCPP(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -244,7 +230,7 @@ static void BM_AccessJSAttrInCPP(benchmark::State& state) {
     }
 }
 
-static void BM_AccessJSAttrInCPPOpt(benchmark::State& state) {
+static void BM_AccessJSPropertyInCPPOpt(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -386,20 +372,18 @@ static void BM_DenseRange(benchmark::State& state) {
 //BENCHMARK(BM_DenseRange)->DenseRange(0, 1024, 128);
 
 BENCHMARK(BM_Empty);
-BENCHMARK(BM_CallEvalJSFunc);
-BENCHMARK(BM_CallEvalCallPureJSFunc);
 BENCHMARK(BM_CallBindingJSFunc);
 BENCHMARK(BM_CallPureCPPFunc);
 BENCHMARK(BM_CallLoopCPPFunc);
 BENCHMARK(BM_CallLoopJSFunc);
 
-BENCHMARK(BM_CallLoopJSAttr);
-BENCHMARK(BM_CallLoopJSDynAttr);
-BENCHMARK(BM_CallLoopJSBAttr);
-BENCHMARK(BM_CallLoopJSBDynAttr);
+BENCHMARK(BM_CallLoopJS_AttrFunc);
+BENCHMARK(BM_CallLoopJS_Dyn_AttrFunc);
+BENCHMARK(BM_CallLoopJSB_AttrFunc);
+BENCHMARK(BM_CallLoopJSB_Dyn_AttrFunc);
 
-BENCHMARK(BM_AccessJSAttrInCPP);
-BENCHMARK(BM_AccessJSAttrInCPPOpt);
+BENCHMARK(BM_AccessJSPropertyInCPP);
+BENCHMARK(BM_AccessJSPropertyInCPPOpt);
 
 BENCHMARK(BM_CallNatveWith_2_arguments);
 BENCHMARK(BM_CallNatveWith_3_arguments);
@@ -411,6 +395,7 @@ BENCHMARK(BM_CallNatveWith_2_3_arguments);
 BENCHMARK(BM_CallNatveWith_2_4_arguments);
 
 BENCHMARK(BM_Empty);
+BENCHMARK(BM_CallEvalCallPureJSFunc);
 
 // Run the benchmark
 BENCHMARK_MAIN();

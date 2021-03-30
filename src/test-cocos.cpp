@@ -104,28 +104,30 @@ public:
 SeGuard uniqueSE;
 
 
-static void BM_CallCocosSEFunc(benchmark::State& state) {
+static void BM_CallBindingJSFunc(benchmark::State& state) {
     auto* js = se::ScriptEngine::getInstance();
     auto* fn = uniqueSE.testFn.toObject();
+    std::vector<se::Value> jsArgs;
+    se::AutoHandleScope scope;
+    se::Value ret;
     for (auto _ : state) {
         // This code gets timed
-        se::AutoHandleScope scope;
-        std::vector<se::Value> jsArgs;
-        se::Value ret;
-        fn->isFunction();
+//        fn->isFunction();
         fn->call(jsArgs, nullptr, &ret);
         uint32_t color = ret.toUint32();
         assert(color == 0x808080FF);
+        benchmark::DoNotOptimize(color);
     }
 }
 
-static void BM_CallCPPFunc(benchmark::State& state) {
+static void BM_CallPureCPPFunc(benchmark::State& state) {
     auto* c = new Color{128,128,128, 255};
 
     for (auto _ : state) {
         // This code gets timed
         auto color = c->intValue();
         assert(color == 0x808080FF);
+        benchmark::DoNotOptimize(color);
     }
 }
 
@@ -149,7 +151,7 @@ static void BM_CallLoopCPPFunc(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSAttrFunc(benchmark::State& state) {
+static void BM_CallLoopJS_AttrFunc(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -158,7 +160,7 @@ static void BM_CallLoopJSAttrFunc(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSDynAttrFunc(benchmark::State& state) {
+static void BM_CallLoopJS_Dyn_AttrFunc(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -167,7 +169,7 @@ static void BM_CallLoopJSDynAttrFunc(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSBAttrFunc(benchmark::State& state) {
+static void BM_CallLoopJSB_AttrFunc(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -176,7 +178,7 @@ static void BM_CallLoopJSBAttrFunc(benchmark::State& state) {
     }
 }
 
-static void BM_CallLoopJSBDynAttrFunc(benchmark::State& state) {
+static void BM_CallLoopJSB_Dyn_AttrFunc(benchmark::State& state) {
     se::AutoHandleScope scope;
     std::vector<se::Value> args = {};
     se::Value ret;
@@ -297,14 +299,14 @@ static void BM_Empty(benchmark::State& state) {
 }
 
 BENCHMARK(BM_Empty);
-BENCHMARK(BM_CallCPPFunc);
-BENCHMARK(BM_CallCocosSEFunc);
+BENCHMARK(BM_CallBindingJSFunc);
+BENCHMARK(BM_CallPureCPPFunc);
 BENCHMARK(BM_CallLoopJSFunc);
 BENCHMARK(BM_CallLoopCPPFunc);
-BENCHMARK(BM_CallLoopJSAttrFunc);
-BENCHMARK(BM_CallLoopJSDynAttrFunc);
-BENCHMARK(BM_CallLoopJSBAttrFunc);
-BENCHMARK(BM_CallLoopJSBDynAttrFunc);
+BENCHMARK(BM_CallLoopJS_AttrFunc);
+BENCHMARK(BM_CallLoopJS_Dyn_AttrFunc);
+BENCHMARK(BM_CallLoopJSB_AttrFunc);
+BENCHMARK(BM_CallLoopJSB_Dyn_AttrFunc);
 BENCHMARK(BM_AccessJSPropertyInCPP);
 BENCHMARK(BM_AccessJSPropertyInCPPOpt);
 
