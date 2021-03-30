@@ -98,15 +98,15 @@ UniqueSE inx;
 
 
 
+/**
+ * C++ 单次通过 EvalString 调用 纯 JS 函数
+ */
 static void BM_CallEvalCallPureJSFunc(benchmark::State& state) {
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     v8::Local<v8::Function> fn = inx.testFn.Get(isolate).As<v8::Function>();
     for (auto _ : state) {
-        //v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, {});
-        //uint32_t v = result.ToLocalChecked()->Uint32Value(context).FromJust();
-        //assert(v == 0x808080FF);
         v8::Local<v8::Value> ret;
         jsx->EvalString("testFn()", ret);
         uint32_t v = ret->Int32Value(context).FromJust();
@@ -115,6 +115,9 @@ static void BM_CallEvalCallPureJSFunc(benchmark::State& state) {
     }
 }
 
+/**
+ * C++ 单次通过 v8 Handle 调用 纯 JS 函数
+ */
 static void BM_CallBindingJSFunc(benchmark::State& state) {
     v8::Isolate* isolate = jsx->GetIsolate();
     v8::HandleScope rootScope(isolate);
@@ -128,6 +131,9 @@ static void BM_CallBindingJSFunc(benchmark::State& state) {
     }
 }
 
+/**
+ * C++ 单次调用 C++ 函数
+ */
 static void BM_CallPureCPPFunc(benchmark::State& state) {
     Color* c = new Color{128, 128, 128, 255};
     for (auto _ : state) {
@@ -137,6 +143,9 @@ static void BM_CallPureCPPFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS循环调用 纯 JS 函数
+ */
 static void BM_CallLoopJSFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -150,6 +159,9 @@ static void BM_CallLoopJSFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS循环调用 C++ 函数
+ */
 static void BM_CallLoopCPPFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -162,6 +174,9 @@ static void BM_CallLoopCPPFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环访问 纯JS 静态属性
+ */
 static void BM_CallLoopJS_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -175,6 +190,9 @@ static void BM_CallLoopJS_AttrFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环访问 纯JS 动态属性
+ */
 static void BM_CallLoopJS_Dyn_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -188,6 +206,9 @@ static void BM_CallLoopJS_Dyn_AttrFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环访问 C++ 属性
+ */
 static void BM_CallLoopJSB_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -201,6 +222,9 @@ static void BM_CallLoopJSB_AttrFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环访问 C++ 动态属性
+ */
 static void BM_CallLoopJSB_Dyn_AttrFunc(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -214,6 +238,9 @@ static void BM_CallLoopJSB_Dyn_AttrFunc(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 单次访问纯 JS 对象的属性
+ */
 static void BM_AccessJSPropertyInCPP(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -229,7 +256,9 @@ static void BM_AccessJSPropertyInCPP(benchmark::State& state) {
         assert(v == 255);
     }
 }
-
+/**
+ *  C++ 单次访问纯 JS 对象的属性(尝试优化)
+ */
 static void BM_AccessJSPropertyInCPPOpt(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -245,7 +274,9 @@ static void BM_AccessJSPropertyInCPPOpt(benchmark::State& state) {
         assert(result.ToLocalChecked()->Int32Value(context).FromJust() == 255);
     }
 }
-
+/**
+ *  C++ 调用: JS 循环调用 [C++Obj x 2] C++ 函数
+ */
 static void BM_CallLoopNatveWith_2_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -259,6 +290,9 @@ static void BM_CallLoopNatveWith_2_arguments(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环调用 [C++Obj x 3] C++ 函数
+ */
 static void BM_CallLoopNatveWith_3_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -271,6 +305,9 @@ static void BM_CallLoopNatveWith_3_arguments(benchmark::State& state) {
         assert(result.ToLocalChecked()->IsObject());
     }
 }
+/**
+ *  C++ 调用: JS 循环调用 [C++Obj x 4] C++ 函数
+ */
 static void BM_CallLoopNatveWith_4_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -284,6 +321,10 @@ static void BM_CallLoopNatveWith_4_arguments(benchmark::State& state) {
     }
 }
 
+
+/**
+ *  C++ 调用: JS 循环调用 [int x 1] C++ 函数
+ */
 static void BM_CallLoopNatveWith_2_1_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -297,6 +338,9 @@ static void BM_CallLoopNatveWith_2_1_arguments(benchmark::State& state) {
     }
 }
 
+/**
+ *  C++ 调用: JS 循环调用 [int x 2] C++ 函数
+ */
 static void BM_CallLoopNatveWith_2_2_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -309,7 +353,9 @@ static void BM_CallLoopNatveWith_2_2_arguments(benchmark::State& state) {
         assert(result.ToLocalChecked()->IsObject());
     }
 }
-
+/**
+ *  C++ 调用: JS 循环调用 [int x 3] C++ 函数
+ */
 static void BM_CallLoopNatveWith_2_3_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -322,7 +368,9 @@ static void BM_CallLoopNatveWith_2_3_arguments(benchmark::State& state) {
         assert(result.ToLocalChecked()->IsObject());
     }
 }
-
+/**
+ *  C++ 调用: JS 循环调用 [int x 4] C++ 函数
+ */
 static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
