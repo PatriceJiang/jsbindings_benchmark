@@ -29,7 +29,8 @@ set(USE_MIDDLEWARE OFF)
 set(USE_SE_V8 ON)
 set(USE_VIDEO OFF)
 set(USE_AUDIO OFF)
-if(WINDOWS)
+
+if(WIN32)
     set(CC_ENGINE D:/Github/cocos2d-x-lite)
     set(CC_ENGINE_EXT D:/Github/cocos2d-x-lite-external)
 else()
@@ -41,18 +42,19 @@ include(${CC_ENGINE}/CMakeLists.txt)
 
 add_library(benchmark STATIC IMPORTED GLOBAL)
 add_library(benchmark_main STATIC IMPORTED GLOBAL)
-if(WINDOWS)
+if(WIN32)
+    set(GOOGLE_BENCHMARK "D:/Github/benchmark")
     set_target_properties(benchmark PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_LIST_DIR}/build/src/Release/benchmark.lib"
-        IMPORTED_LOCATION_DEBUG "${CMAKE_CURRENT_LIST_DIR}/build/src/Debug/benchmark.lib"
-        INTERFACE_INCLUDE_DIRECTORIES  "${CMAKE_CURRENT_LIST_DIR}/include"
+        IMPORTED_LOCATION_RELEASE "${GOOGLE_BENCHMARK}/build/src/Release/benchmark.lib"
+        IMPORTED_LOCATION_DEBUG "${GOOGLE_BENCHMARK}/build/src/Debug/benchmark.lib"
+        INTERFACE_INCLUDE_DIRECTORIES  "${GOOGLE_BENCHMARK}/include"
     )
-    add_library(benchmark_main STATIC IMPORTED GLOBAL)
     set_target_properties(benchmark_main PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_LIST_DIR}/build/src/Release/benchmark_main.lib"
-        IMPORTED_LOCATION_DEBUG "${CMAKE_CURRENT_LIST_DIR}/build/src/Debug/benchmark_main.lib"
-        INTERFACE_INCLUDE_DIRECTORIES  "${CMAKE_CURRENT_LIST_DIR}/include"
+        IMPORTED_LOCATION_RELEASE "${GOOGLE_BENCHMARK}/build/src/Release/benchmark_main.lib"
+        IMPORTED_LOCATION_DEBUG "${GOOGLE_BENCHMARK}/build/src/Debug/benchmark_main.lib"
+        INTERFACE_INCLUDE_DIRECTORIES  "${GOOGLE_BENCHMARK}/include"
     )
+    target_link_libraries(benchmark INTERFACE Shlwapi)
 else()
     set_target_properties(benchmark PROPERTIES
         IMPORTED_LOCATION "/Users/pt/Github/benchmark/build/src/libbenchmark.a"
@@ -65,35 +67,36 @@ else()
 endif()
 
 
-if(WINDOWS)
+if(WIN32)
     target_link_libraries(v8 INTERFACE v8_libbase v8_libplatform)
     set(V8LIBS v8)
     set(OTHERLIBS Shlwapi)
 else()
     set(V8LIBS v8_monolith)
-    set(OTHERLIBS )
+    set(OTHERLIBS)
 endif()
 
 target_link_libraries(test-raw PUBLIC
+    ${V8LIBS}
     benchmark
     benchmark_main
-    ${OTHERLIBS}
-    ${V8LIBS}
+    Shlwapi
 )
+
+if(WIN32)
+    target_link_libraries(test-raw PUBLIC
+        ${OTHERLIBS}
+    )
+endif()
+
 target_include_directories(test-raw PRIVATE
     src
     src/raw
     src/structs
 )
 
-# add_executable(v8_demo src/raw/v8-demo.cpp)
-# target_link_libraries(v8_demo PRIVATE
-#     v8
-# )
 
-
-
-if(WINDOWS)
+if(WIN32)
     foreach(lib v8 v8_libbase v8_libplatform)
         get_target_property(LOC ${lib} IMPORTED_LOCATION)
         add_custom_command(TARGET test-raw POST_BUILD
@@ -129,8 +132,14 @@ target_link_libraries(test-cocos PRIVATE
     cocos2d
     benchmark
     benchmark_main
-    ${OTHERLIBS}
+    $<IF:$<BOOL:${WIN32}>,${OTHERLIBS},>
 )
+
+if(WIN32)
+    target_link_libraries(test-cocos PRIVATE
+        ${OTHERLIBS}
+    )
+endif()
 
 target_include_directories(test-cocos PRIVATE
     src
@@ -138,7 +147,7 @@ target_include_directories(test-cocos PRIVATE
     src/structs
 )
 
-if(WINDOWS)
+if(WIN32)
     add_custom_command(TARGET test-cocos POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${CC_ENGINE_EXT}/win32/libs/zlib.dll $<TARGET_FILE_DIR:test-raw>/
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_LIST_DIR}/src/test.js $<TARGET_FILE_DIR:test-cocos>/
