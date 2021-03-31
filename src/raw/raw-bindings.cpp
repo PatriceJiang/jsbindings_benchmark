@@ -1,6 +1,7 @@
 #include "raw-bindings.h"
 #include "color.h"
 #include "simple_v8.h"
+#include <iostream>
 
 void js_weakCallback(const v8::WeakCallbackInfo<void>& info) {
     auto* ptr = (Color*)info.GetParameter();
@@ -229,6 +230,60 @@ static void js_Color_get_dyn(v8::Local<v8::String> property,
     info.GetReturnValue().Set(v8::Int32::New(info.GetIsolate(), c->dyn()));
 }
 
+static void consoleLog(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::HandleScope scope(info.GetIsolate());
+    void* ptr = info.This()->GetAlignedPointerFromInternalField(0);
+    Color* color = static_cast<Color*>(ptr);
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+    std::cout << "console.log: ";
+    for (int i = 0; i < info.Length(); i++) {
+        std::cout << js::fromJSValue(info.GetIsolate(), info[i]) << " "; 
+    }
+    std::cout << std::endl;
+}
+static void consoleWarn(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::HandleScope scope(info.GetIsolate());
+    void* ptr = info.This()->GetAlignedPointerFromInternalField(0);
+    Color* color = static_cast<Color*>(ptr);
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+    std::cout << "console.warn: ";
+    for (int i = 0; i < info.Length(); i++) {
+        std::cout << js::fromJSValue(info.GetIsolate(), info[i]) << " ";
+    }
+    std::cout << std::endl;
+}
+static void consoleError(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::HandleScope scope(info.GetIsolate());
+    void* ptr = info.This()->GetAlignedPointerFromInternalField(0);
+    Color* color = static_cast<Color*>(ptr);
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+    std::cout << "console.error: ";
+    for (int i = 0; i < info.Length(); i++) {
+        std::cout << js::fromJSValue(info.GetIsolate(), info[i]) << " ";
+    }
+    std::cout << std::endl;
+}static void consoleDebug(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::HandleScope scope(info.GetIsolate());
+    void* ptr = info.This()->GetAlignedPointerFromInternalField(0);
+    Color* color = static_cast<Color*>(ptr);
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+    std::cout << "console.debug: ";
+    for (int i = 0; i < info.Length(); i++) {
+        std::cout << js::fromJSValue(info.GetIsolate(), info[i]) << " ";
+    }
+    std::cout << std::endl;
+}
+static void consoleInfo(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    v8::HandleScope scope(info.GetIsolate());
+    void* ptr = info.This()->GetAlignedPointerFromInternalField(0);
+    Color* color = static_cast<Color*>(ptr);
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+    std::cout << "console.info: ";
+    for (int i = 0; i < info.Length(); i++) {
+        std::cout << js::fromJSValue(info.GetIsolate(), info[i]) << " ";
+    }
+    std::cout << std::endl;
+}
 
 void register_all_color(v8::Isolate *isolate) {
 
@@ -281,4 +336,13 @@ void register_all_color(v8::Isolate *isolate) {
 
     globalObj->Set(context, colorClassName, fnTpl->GetFunction(context).ToLocalChecked()).Check();
 
+    auto maybeConsole = globalObj->Get(context, js::toJSString(isolate, "console"));
+    if (!maybeConsole.IsEmpty()) {
+        auto consoleObject = maybeConsole.ToLocalChecked().As<v8::Object>();
+        consoleObject->Set(context, js::toJSString(isolate, "log"), v8::FunctionTemplate::New(isolate, consoleLog)->GetFunction(context).ToLocalChecked());
+        consoleObject->Set(context, js::toJSString(isolate, "warn"), v8::FunctionTemplate::New(isolate, consoleWarn)->GetFunction(context).ToLocalChecked());
+        consoleObject->Set(context, js::toJSString(isolate, "error"), v8::FunctionTemplate::New(isolate, consoleError)->GetFunction(context).ToLocalChecked());
+        consoleObject->Set(context, js::toJSString(isolate, "debug"), v8::FunctionTemplate::New(isolate, consoleDebug)->GetFunction(context).ToLocalChecked());
+        consoleObject->Set(context, js::toJSString(isolate, "info"), v8::FunctionTemplate::New(isolate, consoleInfo)->GetFunction(context).ToLocalChecked());
+    }
 }

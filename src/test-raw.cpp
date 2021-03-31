@@ -34,7 +34,7 @@ public:
         }
         jsx->EvalString(code, ret);
 
-
+        std::cout << " -- bindings" << std::endl;
         bindVariable(isolate, context, "testFn", testFn);
         bindVariable(isolate, context, "loopJS", loopJS);
         bindVariable(isolate, context, "loopCPP", loopCPP);

@@ -1,4 +1,4 @@
-    function ColorJS () {
+function ColorJS () {
     this._r = this._g = this._b = this._a = 0;
 }
 Object.defineProperty(ColorJS.prototype, 'r', {

@@ -1,7 +1,7 @@
 #include "simple_v8.h"
 #include <cassert>
 #include "libplatform/libplatform.h"
-
+#include <iostream>
 #include "v8_callback.h"
 
 namespace {
@@ -85,17 +85,34 @@ JS::~JS() {
 
 
 bool JS::EvalString(const std::string_view& code, v8::Local<v8::Value> &out) {
+    //std::cout << " 0 " << std::endl;
     v8::EscapableHandleScope scope(_isolate);
+    //std::cout << " 1 " << std::endl;
     v8::Local<v8::Context> context = _isolate->GetCurrentContext();
     v8::Local<v8::String> source = v8::String::NewFromUtf8(_isolate, code.data(), v8::NewStringType::kNormal)
         .ToLocalChecked();
 
-    v8::Local<v8::Script> script = v8::Script::Compile(context, source).ToLocalChecked();
+    std::unique_ptr<v8::ScriptOrigin> origin = std::make_unique<v8::ScriptOrigin>(
+        js::toJSString(_isolate, "somecode")
+        );
 
+
+    //std::cout << " 2  len: " << code.length() << std::endl;
+    v8::MaybeLocal<v8::Script> maybeScript = v8::Script::Compile(context, source, origin.get());
+    if (maybeScript.IsEmpty()) {
+
+        std::cerr << " 2.x  failed to compile script" << std::endl;
+        return false;
+    }
+    auto script = maybeScript.ToLocalChecked();
+
+    //std::cout << " 3 " << std::endl;
     v8::TryCatch tryCatch(_isolate);
 
+    //std::cout << " 4 " << std::endl;
     v8::MaybeLocal<v8::Value> maybeResult = script->Run(context);
 
+    //std::cout << " 5 " << std::endl;
     if (tryCatch.HasCaught()) {
         v8::Local<v8::Value> exception = tryCatch.Exception();
         std::string exceptionStr = fromJSValue(_isolate, exception);
@@ -106,17 +123,19 @@ bool JS::EvalString(const std::string_view& code, v8::Local<v8::Value> &out) {
         return false;
     }
 
+    //std::cout << " 6 " << std::endl;
     if (maybeResult.IsEmpty()) {
         printf("[error] %s\n", __FUNCTION__);
         return false;
     }
 
+    //std::cout << " 7 " << std::endl;
     v8::Local<v8::Value> result = maybeResult.ToLocalChecked();
     out = scope.Escape(result);
     return true;
 }
 
-std::string fromJSValue(v8::Isolate* isolate, v8::Local<v8::Value>& v)
+std::string fromJSValue(v8::Isolate* isolate, const v8::Local<v8::Value>& v)
 {
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     v8::Local<v8::String> str = v->ToString(context).ToLocalChecked();

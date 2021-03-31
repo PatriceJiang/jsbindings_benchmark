@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 
 project(GoogleBenchmarkTest CXX)
 
-enable_language(C ASM OBJC)
+enable_language(C ASM)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -30,7 +30,7 @@ set(USE_SE_V8 ON)
 set(USE_VIDEO OFF)
 set(USE_AUDIO OFF)
 
-if(WIN32)
+if(WIN32 OR ANDROID)
     set(CC_ENGINE D:/Github/cocos2d-x-lite)
     set(CC_ENGINE_EXT D:/Github/cocos2d-x-lite-external)
 else()
@@ -55,6 +55,16 @@ if(WIN32)
         INTERFACE_INCLUDE_DIRECTORIES  "${GOOGLE_BENCHMARK}/include"
     )
     target_link_libraries(benchmark INTERFACE Shlwapi)
+elseif(ANDROID)
+    set(GOOGLE_BENCHMARK "D:/Github/benchmark")
+    set_target_properties(benchmark PROPERTIES
+        IMPORTED_LOCATION "${GOOGLE_BENCHMARK}/build-android/src/libbenchmark.a"
+        INTERFACE_INCLUDE_DIRECTORIES  "${GOOGLE_BENCHMARK}/include"
+    )
+    set_target_properties(benchmark_main PROPERTIES
+        IMPORTED_LOCATION "${GOOGLE_BENCHMARK}/build-android/src/libbenchmark_main.a"
+        INTERFACE_INCLUDE_DIRECTORIES  "${GOOGLE_BENCHMARK}/include"
+    )
 else()
     set_target_properties(benchmark PROPERTIES
         IMPORTED_LOCATION "/Users/pt/Github/benchmark/build/src/libbenchmark.a"
@@ -80,12 +90,15 @@ target_link_libraries(test-raw PUBLIC
     ${V8LIBS}
     benchmark
     benchmark_main
-    Shlwapi
 )
 
 if(WIN32)
     target_link_libraries(test-raw PUBLIC
         ${OTHERLIBS}
+    )
+elseif(ANDROID)
+    target_link_libraries(test-raw PUBLIC
+    android log
     )
 endif()
 
@@ -94,6 +107,13 @@ target_include_directories(test-raw PRIVATE
     src/raw
     src/structs
 )
+
+if(ANDROID)
+    target_include_directories(test-raw PRIVATE
+        ${CC_ENGINE_EXT}/android/arm64-v8a/include/v8
+    )
+    target_compile_definitions(test-raw PUBLIC V8_COMPRESS_POINTERS=1)
+endif()
 
 
 if(WIN32)
@@ -141,11 +161,19 @@ if(WIN32)
     )
 endif()
 
+
+if(ANDROID)
+    target_compile_definitions(test-cocos PUBLIC V8_COMPRESS_POINTERS)
+endif()
+
+
 target_include_directories(test-cocos PRIVATE
     src
     src/cocos
     src/structs
 )
+
+
 
 if(WIN32)
     add_custom_command(TARGET test-cocos POST_BUILD
@@ -159,3 +187,5 @@ else()
     )
 endif()
 
+
+add_executable(test-alloc src/test-alloc.cpp)

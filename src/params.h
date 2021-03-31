@@ -25,6 +25,9 @@ std::string readFile(const std::string_view& path) {
         ret.resize(size, 0);
         input.read(ret.data(), size);
         input.close();
+        //std::cout << "-----file-----" << std::endl;
+        //std::cout << ret << std::endl;
+        //std::cout << "-----end -----" << std::endl;
         return ret;
     }
     return "";

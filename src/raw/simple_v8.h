@@ -53,7 +53,7 @@ private:
   v8::Persistent<v8::Context> _context = {};
 };
 
-std::string fromJSValue(v8::Isolate *isolate, v8::Local<v8::Value>& v);
+std::string fromJSValue(v8::Isolate *isolate, const v8::Local<v8::Value>& v);
 v8::Local<v8::String> toJSString(v8::Isolate* isolate, const std::string_view& text);
 
 } // namespace js
