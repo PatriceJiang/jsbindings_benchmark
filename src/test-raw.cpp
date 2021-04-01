@@ -536,12 +536,10 @@ static void BM_Empty(benchmark::State& state) {
 
 BENCHMARK(BM_Empty);
 
-BENCHMARK(BM_CallLoopJS_AOS_sumColor);
-BENCHMARK(BM_CallLoopJS_Simple_sumColor);
 BENCHMARK(BM_CallLoopJS_AOS_setColor);
 BENCHMARK(BM_CallLoopJS_Simple_setColor);
-
-
+BENCHMARK(BM_CallLoopJS_AOS_sumColor);
+BENCHMARK(BM_CallLoopJS_Simple_sumColor);
 BENCHMARK(BM_CallLoopJS_Indirect_AOS_sumColor);
 BENCHMARK(BM_CallLoopJS_Indirect_AOS_sumColor_shuffle);
 BENCHMARK(BM_CallLoopJS_Indirect_Simple_sumColor);
