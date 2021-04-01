@@ -75,6 +75,15 @@ public:
         loopJSB_call2_4_args.toObject()->incRef();
 
 
+        js->getGlobalObject()->getProperty("loopJS_AOS_sumColor", &loopJS_AOS_sumColor);
+        loopJS_AOS_sumColor.toObject()->incRef();
+        js->getGlobalObject()->getProperty("loopJS_Simple_sumColor", &loopJS_Simple_sumColor);
+        loopJS_Simple_sumColor.toObject()->incRef();
+        js->getGlobalObject()->getProperty("loopJS_AOS_setColor", &loopJS_AOS_setColor);
+        loopJS_AOS_setColor.toObject()->incRef();
+        js->getGlobalObject()->getProperty("loopJS_Simple_setColor", &loopJS_Simple_setColor);
+        loopJS_Simple_setColor.toObject()->incRef();
+
         std::cout << "----!!! LOOP_TIMES " << LOOP_TIMES << " !!!-----" <<  std::endl;
     }
     ~SeGuard() {
@@ -100,6 +109,12 @@ public:
     se::Value loopJSB_call2_2_args;
     se::Value loopJSB_call2_3_args;
     se::Value loopJSB_call2_4_args;
+
+    
+    se::Value loopJS_AOS_sumColor;
+    se::Value loopJS_Simple_sumColor;
+    se::Value loopJS_AOS_setColor;
+    se::Value loopJS_Simple_setColor;
 };
 SeGuard uniqueSE;
 
@@ -304,6 +319,44 @@ static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
     }
 }
 
+static void BM_CallLoopJS_AOS_sumColor(benchmark::State& state) {
+    se::AutoHandleScope scope;
+    std::vector<se::Value> args = {};
+    se::Value ret;
+    for (auto _ : state) {
+        uniqueSE.loopJS_AOS_sumColor.toObject()->call(args, nullptr, &ret);
+        assert(ret.isObject());
+    }
+}
+static void BM_CallLoopJS_Simple_sumColor(benchmark::State& state) {
+    se::AutoHandleScope scope;
+    std::vector<se::Value> args = {};
+    se::Value ret;
+    for (auto _ : state) {
+        uniqueSE.loopJS_Simple_sumColor.toObject()->call(args, nullptr, &ret);
+        assert(ret.isObject());
+    }
+}
+static void BM_CallLoopJS_AOS_setColor(benchmark::State& state) {
+    se::AutoHandleScope scope;
+    std::vector<se::Value> args = {};
+    se::Value ret;
+    for (auto _ : state) {
+        uniqueSE.loopJS_AOS_setColor.toObject()->call(args, nullptr, &ret);
+        assert(ret.isObject());
+    }
+}
+static void BM_CallLoopJS_Simple_setColor(benchmark::State& state) {
+    se::AutoHandleScope scope;
+    std::vector<se::Value> args = {};
+    se::Value ret;
+    for (auto _ : state) {
+        uniqueSE.loopJS_Simple_setColor.toObject()->call(args, nullptr, &ret);
+        assert(ret.isObject());
+    }
+}
+
+
 static void BM_Empty(benchmark::State& state) {
     // Perform setup here
     for (auto _ : state) {
@@ -312,6 +365,12 @@ static void BM_Empty(benchmark::State& state) {
 }
 
 BENCHMARK(BM_Empty);
+
+BENCHMARK(BM_CallLoopJS_AOS_sumColor);
+BENCHMARK(BM_CallLoopJS_Simple_sumColor);
+BENCHMARK(BM_CallLoopJS_AOS_setColor);
+BENCHMARK(BM_CallLoopJS_Simple_setColor);
+
 BENCHMARK(BM_CallEvalCallPureJSFunc);
 BENCHMARK(BM_CallBindingJSFunc);
 BENCHMARK(BM_CallPureCPPFunc);
@@ -333,6 +392,7 @@ BENCHMARK(BM_CallLoopNatveWith_2_1_arguments);
 BENCHMARK(BM_CallLoopNatveWith_2_2_arguments);
 BENCHMARK(BM_CallLoopNatveWith_2_3_arguments);
 BENCHMARK(BM_CallLoopNatveWith_2_4_arguments);
+
 BENCHMARK(BM_Empty);
 // Run the benchmark
 BENCHMARK_MAIN();
