@@ -57,6 +57,18 @@ public:
         bindVariable(isolate, context, "loopJSB_call2_3_args", loopJSB_call2_3_args);
         bindVariable(isolate, context, "loopJSB_call2_4_args", loopJSB_call2_4_args);
 
+        bindVariable(isolate, context, "loopJS_AOS_sumColor", loopJS_AOS_sumColor);
+        bindVariable(isolate, context, "loopJS_Simple_sumColor", loopJS_Simple_sumColor);
+        bindVariable(isolate, context, "loopJS_AOS_setColor", loopJS_AOS_setColor);
+        bindVariable(isolate, context, "loopJS_Simple_setColor", loopJS_Simple_setColor);
+
+        
+        bindVariable(isolate, context, "loopJS_Indirect_AOS_sumColor", loopJS_Indirect_AOS_sumColor);
+        bindVariable(isolate, context, "loopJS_Indirect_Simple_sumColor", loopJS_Indirect_Simple_sumColor);
+
+        bindVariable(isolate, context, "loopJS_Indirect_AOS_Scene_sumColor", loopJS_Indirect_AOS_Scene_sumColor);
+        bindVariable(isolate, context, "loopJS_Indirect_Simple_Scene_sumColor", loopJS_Indirect_AOS_Scene_sumColor);
+
     }
 
     ~UniqueSE() {
@@ -81,6 +93,20 @@ public:
     v8::Persistent<v8::Value> loopJSB_call2_2_args;
     v8::Persistent<v8::Value> loopJSB_call2_3_args;
     v8::Persistent<v8::Value> loopJSB_call2_4_args;
+
+
+    v8::Persistent<v8::Value>  loopJS_AOS_sumColor;
+    v8::Persistent<v8::Value>  loopJS_Simple_sumColor;
+    v8::Persistent<v8::Value>  loopJS_AOS_setColor;
+    v8::Persistent<v8::Value>  loopJS_Simple_setColor;
+
+    
+    v8::Persistent<v8::Value>  loopJS_Indirect_Simple_sumColor;
+    v8::Persistent<v8::Value>  loopJS_Indirect_AOS_sumColor;
+
+    
+    v8::Persistent<v8::Value>  loopJS_Indirect_AOS_Scene_sumColor;
+    v8::Persistent<v8::Value>  loopJS_Indirect_Simple_Scene_sumColor;
 
 
 private:
@@ -384,6 +410,105 @@ static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
     }
 }
 
+static void BM_CallLoopJS_AOS_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_AOS_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+
+static void BM_CallLoopJS_Simple_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Simple_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+static void BM_CallLoopJS_AOS_setColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_AOS_setColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+static void BM_CallLoopJS_Simple_setColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Simple_setColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+
+static void BM_CallLoopJS_Indirect_AOS_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Indirect_AOS_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+
+static void BM_CallLoopJS_Indirect_Simple_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Indirect_Simple_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+static void BM_CallLoopJS_Indirect_AOS_Scene_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Indirect_AOS_Scene_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
+
+static void BM_CallLoopJS_Indirect_Simple_Scene_sumColor(benchmark::State& state) {
+
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Indirect_Simple_Scene_sumColor.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
+
 static void BM_Empty(benchmark::State& state) {
     // Perform setup here
     for (auto _ : state) {
@@ -398,6 +523,20 @@ static void BM_Empty(benchmark::State& state) {
 //BENCHMARK(BM_DenseRange)->DenseRange(0, 1024, 128);
 
 BENCHMARK(BM_Empty);
+
+BENCHMARK(BM_CallLoopJS_AOS_sumColor);
+BENCHMARK(BM_CallLoopJS_Simple_sumColor);
+BENCHMARK(BM_CallLoopJS_AOS_setColor);
+BENCHMARK(BM_CallLoopJS_Simple_setColor);
+
+
+BENCHMARK(BM_CallLoopJS_Indirect_AOS_sumColor);
+BENCHMARK(BM_CallLoopJS_Indirect_Simple_sumColor);
+
+
+BENCHMARK(BM_CallLoopJS_Indirect_AOS_Scene_sumColor);
+BENCHMARK(BM_CallLoopJS_Indirect_Simple_Scene_sumColor);
+
 BENCHMARK(BM_CallEvalCallPureJSFunc);
 BENCHMARK(BM_CallBindingJSFunc);
 BENCHMARK(BM_CallPureCPPFunc);
