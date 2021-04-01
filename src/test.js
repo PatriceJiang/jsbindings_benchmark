@@ -266,7 +266,7 @@ function loopJS_Simple_setColor () {
 
 
 /////////////////////node indirection 2///////////////
-const NODE_SIZE = 10;
+const NODE_SIZE = 32;
 const NODE_COLOR_OFFSET = 2;
 let  NodeAOS =  {
     alloc: function(size) {
@@ -323,6 +323,50 @@ function loopJS_Indirect_Simple_sumColor () {
     return s;
 }
 
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
+let shuffleArray = [];
+for(let i = 0;i < TEST_ELEMENTS; i++) {
+    shuffleArray.push(i);
+}
+shuffle(shuffleArray);
+// console.log(shuffleArray);
+
+function loopJS_Indirect_AOS_sumColor_shuffle () {
+    let s = 0, colorID, nodeId;
+    for (let i = 0; i < LOOP_TIMES; i++) {
+        for (let j= 0; j < TEST_ELEMENTS; j++) {
+            nodeId = shuffleArray[j];
+            colorID = NodeAOS.getColorID(nodeAOS, nodeId);
+            s += (ColorAOS.getR(colorAOS, colorID) + 
+            ColorAOS.getG(colorAOS, colorID) + 
+            ColorAOS.getB(colorAOS, colorID) + 
+            ColorAOS.getA(colorAOS, colorID));
+        }
+        s = 0;
+    }
+    return s;
+}
+
+
 /////////////////////scene indirection 2///////////////
 
 
@@ -357,7 +401,7 @@ let sceneAOS = [];
 for(let i = 0; i < TEST_ELEMENTS; i++) {
     sceneAOS[i] =new SceneAOS;
     sceneAOS[i].childrenID = i;
-    roll(arrayAOS[i], 0, TEST_ELEMENTS, 1, 2);
+    roll(arrayAOS[i], 0, TEST_ELEMENTS, 10, 20);
 }
 
 function SceneSimple() {

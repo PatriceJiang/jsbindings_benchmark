@@ -64,6 +64,7 @@ public:
 
         
         bindVariable(isolate, context, "loopJS_Indirect_AOS_sumColor", loopJS_Indirect_AOS_sumColor);
+        bindVariable(isolate, context, "loopJS_Indirect_AOS_sumColor_shuffle", loopJS_Indirect_AOS_sumColor_shuffle);
         bindVariable(isolate, context, "loopJS_Indirect_Simple_sumColor", loopJS_Indirect_Simple_sumColor);
 
         bindVariable(isolate, context, "loopJS_Indirect_AOS_Scene_sumColor", loopJS_Indirect_AOS_Scene_sumColor);
@@ -103,6 +104,7 @@ public:
     
     v8::Persistent<v8::Value>  loopJS_Indirect_Simple_sumColor;
     v8::Persistent<v8::Value>  loopJS_Indirect_AOS_sumColor;
+    v8::Persistent<v8::Value>  loopJS_Indirect_AOS_sumColor_shuffle;
 
     
     v8::Persistent<v8::Value>  loopJS_Indirect_AOS_Scene_sumColor;
@@ -470,7 +472,17 @@ static void BM_CallLoopJS_Indirect_AOS_sumColor(benchmark::State& state) {
         benchmark::DoNotOptimize(result);
     }
 }
+static void BM_CallLoopJS_Indirect_AOS_sumColor_shuffle(benchmark::State& state) {
 
+    v8::Isolate* isolate = jsx->GetIsolate();
+    v8::HandleScope rootScope(isolate);
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Function> fn = inx.loopJS_Indirect_AOS_sumColor_shuffle.Get(isolate).As<v8::Function>();
+    for (auto _ : state) {
+        v8::MaybeLocal<v8::Value> result = fn->CallAsFunction(context, v8::Null(isolate), 0, nullptr);
+        benchmark::DoNotOptimize(result);
+    }
+}
 
 static void BM_CallLoopJS_Indirect_Simple_sumColor(benchmark::State& state) {
 
@@ -531,6 +543,7 @@ BENCHMARK(BM_CallLoopJS_Simple_setColor);
 
 
 BENCHMARK(BM_CallLoopJS_Indirect_AOS_sumColor);
+BENCHMARK(BM_CallLoopJS_Indirect_AOS_sumColor_shuffle);
 BENCHMARK(BM_CallLoopJS_Indirect_Simple_sumColor);
 
 
