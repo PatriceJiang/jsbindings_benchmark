@@ -357,7 +357,7 @@ let sceneAOS = [];
 for(let i = 0; i < TEST_ELEMENTS; i++) {
     sceneAOS[i] =new SceneAOS;
     sceneAOS[i].childrenID = i;
-    roll(arrayAOS[i], 0, TEST_ELEMENTS, 2, 20);
+    roll(arrayAOS[i], 0, TEST_ELEMENTS, 1, 2);
 }
 
 function SceneSimple() {

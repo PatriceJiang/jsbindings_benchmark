@@ -67,7 +67,7 @@ public:
         bindVariable(isolate, context, "loopJS_Indirect_Simple_sumColor", loopJS_Indirect_Simple_sumColor);
 
         bindVariable(isolate, context, "loopJS_Indirect_AOS_Scene_sumColor", loopJS_Indirect_AOS_Scene_sumColor);
-        bindVariable(isolate, context, "loopJS_Indirect_Simple_Scene_sumColor", loopJS_Indirect_AOS_Scene_sumColor);
+        bindVariable(isolate, context, "loopJS_Indirect_Simple_Scene_sumColor", loopJS_Indirect_Simple_Scene_sumColor);
 
     }
 
