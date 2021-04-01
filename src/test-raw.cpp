@@ -412,6 +412,9 @@ static void BM_CallLoopNatveWith_2_4_arguments(benchmark::State& state) {
     }
 }
 
+/**
+* 读取 AOS 对象属性, 求和
+*/
 static void BM_CallLoopJS_AOS_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -424,7 +427,9 @@ static void BM_CallLoopJS_AOS_sumColor(benchmark::State& state) {
     }
 }
 
-
+/**
+* 读取 JS object 对象属性, 求和
+*/
 static void BM_CallLoopJS_Simple_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -436,6 +441,9 @@ static void BM_CallLoopJS_Simple_sumColor(benchmark::State& state) {
         benchmark::DoNotOptimize(result);
     }
 }
+/**
+* 设置 AOS 对象属性	
+*/
 static void BM_CallLoopJS_AOS_setColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -448,6 +456,9 @@ static void BM_CallLoopJS_AOS_setColor(benchmark::State& state) {
     }
 }
 
+/**
+* 设置 JS object 对象属性	
+*/
 static void BM_CallLoopJS_Simple_setColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -461,6 +472,9 @@ static void BM_CallLoopJS_Simple_setColor(benchmark::State& state) {
 }
 
 
+/**
+* 间接 读取 AOS 对象属性, 求和	
+*/
 static void BM_CallLoopJS_Indirect_AOS_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -472,6 +486,10 @@ static void BM_CallLoopJS_Indirect_AOS_sumColor(benchmark::State& state) {
         benchmark::DoNotOptimize(result);
     }
 }
+
+/**
+*间接 读取 AOS 对象属性, 乱序求和
+*/
 static void BM_CallLoopJS_Indirect_AOS_sumColor_shuffle(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -484,6 +502,9 @@ static void BM_CallLoopJS_Indirect_AOS_sumColor_shuffle(benchmark::State& state)
     }
 }
 
+/**
+* 间接 读取 JS object 对象属性, 求和
+*/
 static void BM_CallLoopJS_Indirect_Simple_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -496,6 +517,9 @@ static void BM_CallLoopJS_Indirect_Simple_sumColor(benchmark::State& state) {
     }
 }
 
+/**
+* 2层间接 读取 AOS 对象属性, 求和
+*/
 static void BM_CallLoopJS_Indirect_AOS_Scene_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
@@ -509,6 +533,9 @@ static void BM_CallLoopJS_Indirect_AOS_Scene_sumColor(benchmark::State& state) {
 }
 
 
+/**
+* 2层间接 读取 JS object 对象属性, 求和
+*/
 static void BM_CallLoopJS_Indirect_Simple_Scene_sumColor(benchmark::State& state) {
 
     v8::Isolate* isolate = jsx->GetIsolate();
